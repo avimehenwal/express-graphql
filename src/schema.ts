@@ -10,7 +10,7 @@ export const typeDefs = `#graphql
 
   type Profile {
     id: ID!
-    Location: String!
+    location: String!
     userId: String!
   }
 

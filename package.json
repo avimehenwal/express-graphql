@@ -8,7 +8,7 @@
     "compile": "npx tsc",
     "lint": "npx eslint --ext .ts,.js src",
     "start": "npm run compile && npx node --experimental-modules --es-module-specifier-resolution=node dist/index.js",
-    "prestart": "npx prisma format && npx prisma generate && npx prisma db push",
+    "predev:db": "npx prisma format && npx prisma generate && npx prisma db push",
     "dev:db": "scripts/start-postgres.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
