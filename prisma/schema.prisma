@@ -8,10 +8,10 @@ datasource db {
 }
 
 model User {
-  userId   Int      @id @default(autoincrement())
+  userId   Int       @id @default(autoincrement())
   name     String
-  lastName String
-  dob      Int
+  lastName String?
+  dob      DateTime?
   profile  Profile?
 }
 
