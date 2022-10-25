@@ -18,9 +18,9 @@ export const typeDefs = `#graphql
     user(id: ID!): User
     users: [User!]!
   }
-  
+
+  type Mutation {
+    updateUserLocation(userId: ID!, newLocation: String!): Profile!
+  }
 `;
 
-  // type Mutation {
-  //   updateUserLocation(userId: String!, newLocation: String!): Profile!
-  // }
