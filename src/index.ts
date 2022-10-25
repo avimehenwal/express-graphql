@@ -1,5 +1,8 @@
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import express, {Express, Request, Response } from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const typeDefs = `#graphql
   type Book {
@@ -36,8 +39,13 @@ const server = new ApolloServer({
   resolvers,
 });
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-});
+const app: Express = express();
+const port = process.env.PORT ?? 3000;
 
-console.log(`🚀  Server ready at: ${url}`);
+app.get('/', (req: Request, res: Response) => {
+  res.send(`express server`)
+})
+
+app.listen(port, () => {
+  console.log(`[server] Running at http://localhost:${port}`)
+})
