@@ -17,7 +17,7 @@ model User {
 
 model Profile {
   id       Int    @id @default(autoincrement())
-  Location String
+  location String
   user     User   @relation(fields: [userId], references: [userId])
   userId   Int    @unique
 }

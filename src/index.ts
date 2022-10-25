@@ -8,6 +8,9 @@ import express, { Express } from "express";
 import http from "http";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
+import { PrismaClient } from '@prisma/client'
+
+export const prisma = new PrismaClient()
 
 dotenv.config();
 const { json } = pkg;
