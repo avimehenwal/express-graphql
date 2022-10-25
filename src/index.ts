@@ -1,8 +1,14 @@
-import { ApolloServer } from '@apollo/server';
-import express, {Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import { ApolloServer } from "@apollo/server";
+import express, { Express } from "express";
+import dotenv from "dotenv";
+import { expressMiddleware } from "@apollo/server/express4";
+import cors from "cors";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import http from "http";
+import pkg from "body-parser";
 
 dotenv.config();
+const { json } = pkg;
 
 const typeDefs = `#graphql
   type Book {
@@ -17,12 +23,12 @@ const typeDefs = `#graphql
 
 const books = [
   {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
+    title: "The Awakening",
+    author: "Kate Chopin",
   },
   {
-    title: 'City of Glass',
-    author: 'Paul Auster',
+    title: "City of Glass",
+    author: "Paul Auster",
   },
 ];
 
@@ -34,18 +40,23 @@ const resolvers = {
   },
 };
 
+const app: Express = express();
+const port = process.env.PORT ?? 3000;
+const httpServer = http.createServer(app);
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
+await server.start();
 
-const app: Express = express();
-const port = process.env.PORT ?? 3000;
+app.use(
+  "/graphql",
+  cors<cors.CorsRequest>(),
+  json(),
+  expressMiddleware(server)
+);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send(`express server`)
-})
-
-app.listen(port, () => {
-  console.log(`[server] Running at http://localhost:${port}`)
-})
+await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
