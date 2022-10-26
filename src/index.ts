@@ -1,21 +1,25 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { PrismaClient } from '@prisma/client';
 import pkg from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import http from "http";
+import { authResolvers } from "./authResolvers";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
-import { PrismaClient } from '@prisma/client'
-import { authResolvers } from "./authResolvers";
 
 export const prisma = new PrismaClient()
 
 dotenv.config();
 const { json } = pkg;
 
+export interface IContext {
+  auth: boolean;
+  token: string;
+}
 
 const app: Express = express();
 const port = process.env.PORT ?? 3000;
@@ -33,10 +37,6 @@ app.use(
   json(),
   expressMiddleware(server)
 );
-
-interface IContext {
-  auth: boolean
-}
 
 const authServer = new ApolloServer({
   typeDefs,

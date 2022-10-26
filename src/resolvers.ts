@@ -1,23 +1,23 @@
-import { prisma } from './index'
+import { ProfileModelService, UserModelService } from './dataService';
 
 export const resolvers = {
   Query: {
     users: async () => {
-      return await prisma.user.findMany({ include: { profile: true } })
+      return await UserModelService.getAllUsers()
     },
     user: async (_, args) => {
-      return await prisma.user.findUnique({ where: { userId: parseInt(args.id) }, include: { profile: true } })
+      return await UserModelService.getUserById(args.id)
+    },
+    profiles: async () => {
+      return await ProfileModelService.getAllProfiles()
+    },
+    profile: async (_, args) => {
+      return await ProfileModelService.getProfileById(args.id)
     }
   },
   Mutation: {
     updateUserLocation: async (_, args) => {
-      // console.dir(args, { depth: null })
-      const data = await prisma.profile.update({
-        where: { userId: parseInt(args.userId) },
-        data: { location: args.newLocation }
-      })
-      // console.dir(data)
-      return data
+      return await ProfileModelService.updateLocation(args.userId, args.newLocation)
     }
   }
 };

@@ -1,7 +1,8 @@
-import { prisma } from './index'
 import { GraphQLError } from 'graphql';
+import { ProfileModelService, UserModelService } from './dataService';
+import { IContext } from './index';
 
-function authorizationCheck(context) {
+function authorizationCheck(context: IContext) {
   if (!context.auth || !context.token) {
     throw new GraphQLError('You are not authorized to perform this action.', {
       extensions: {
@@ -15,22 +16,25 @@ export const authResolvers = {
   Query: {
     users: async (parent, args, context, info) => {
       authorizationCheck(context)
-      return await prisma.user.findMany({ include: { profile: true } })
+      return await UserModelService.getAllUsers()
     },
     user: async (_, args, context) => {
       authorizationCheck(context)
-      return await prisma.user.findUnique({ where: { userId: parseInt(args.id) }, include: { profile: true } })
+      return await UserModelService.getUserById(args.id)
+    },
+    profiles: async (_, args, context) => {
+      authorizationCheck(context)
+      return await ProfileModelService.getAllProfiles()
+    },
+    profile: async (_, args, context) => {
+      authorizationCheck(context)
+      return await ProfileModelService.getProfileById(args.id)
     }
   },
   Mutation: {
     updateUserLocation: async (_, args, context) => {
       authorizationCheck(context)
-      const data = await prisma.profile.update({
-        where: { userId: parseInt(args.userId) },
-        data: { location: args.newLocation }
-      })
-      // console.dir(data)
-      return data
+      return ProfileModelService.updateLocation(args.userId, args.newLocation)
     }
   }
 };
