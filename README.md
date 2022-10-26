@@ -34,7 +34,7 @@ this would expose the following 2 API Endpoints
 endpoint  | description
 ----------|------------------------------------------------------
 http://localhost:4000/graphql      | without authorization check
-http://localhost:4000/graphql/auth | with some authorization checks
+http://localhost:4000/auth         | with some authorization checks
 
 ## Api Tests
 
@@ -58,8 +58,10 @@ This project uses following tools and technologies
 3. [ ] Write CRUD operations using queries and mutations
 4. [ ] api unittest could be written on top of integration
 5. [ ] proper [JWT token](https://jwt.io/) could be used to secure the api
+6. [ ] Everything could be strongly typed for TS benefits
+7. [ ] could setup CI/CD pipelines to help with future development workflows
 
-#### @ Reach Me @
+### @ Reach Me @
 
 > available for new opportunity ...
 
