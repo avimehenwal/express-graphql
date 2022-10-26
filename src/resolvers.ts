@@ -18,6 +18,12 @@ export const resolvers = {
   Mutation: {
     updateUserLocation: async (_, args) => {
       return await ProfileModelService.updateLocation(args.userId, args.newLocation)
+    },
+    createUser: async (_, args) => {
+      return await UserModelService.createNewUser(args.userData)
+    },
+    createProfile: async (_, args) => {
+      return await ProfileModelService.createNewProfile(args.profileData)
     }
   }
 };

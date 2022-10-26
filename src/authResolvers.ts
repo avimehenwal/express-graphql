@@ -35,6 +35,14 @@ export const authResolvers = {
     updateUserLocation: async (_, args, context) => {
       authorizationCheck(context)
       return ProfileModelService.updateLocation(args.userId, args.newLocation)
+    },
+    createUser: async (_, args, context) => {
+      authorizationCheck(context)
+      return await UserModelService.createNewUser(args.userData)
+    },
+    createProfile: async (_, args, context) => {
+      authorizationCheck(context)
+      return await ProfileModelService.createNewProfile(args.profileData)
     }
   }
 };

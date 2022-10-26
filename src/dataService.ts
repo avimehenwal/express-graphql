@@ -7,6 +7,16 @@ export class UserModelService {
   static async getUserById(id: string) {
     return await prisma.user.findUnique({ where: { userId: parseInt(id) }, include: { profile: true } })
   }
+  static async createNewUser(userData) {
+    return await prisma.user.create({
+      data: {
+        name: userData.name,
+        lastName: userData.lastName,
+        dob: new Date(userData.dob),
+        userId: userData.userId
+      }
+    })
+  }
 }
 
 export class ProfileModelService {
@@ -20,6 +30,18 @@ export class ProfileModelService {
     return await prisma.profile.update({
       where: { userId: parseInt(userId) },
       data: { location: newLocation }
+    })
+  }
+  static async createNewProfile(profileData) {
+    return await prisma.profile.create({
+      data: {
+        location: profileData.location,
+        user: {
+          connect: {
+            userId: parseInt(profileData.userId),
+          }
+        }
+      },
     })
   }
 }
